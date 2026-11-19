@@ -42,7 +42,7 @@ jobs:
           xcodebuild -workspace ios/Kifak.xcworkspace -scheme Kifak -configuration Release \
             -sdk iphoneos -destination 'generic/platform=iOS' -archivePath build/Kifak.xcarchive archive \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" > build.log 2>&1 || {
-              echo "::group::Errors"; grep -nE "error:|Error:|❌|ERROR|Failed|failed with" build.log | grep -v "^.*warning" | head -100; echo "::endgroup::"
+              echo "::group::Errors"; grep -nE "(^|[^_])error: |^Error: |❌|BUNDLE FAILED|Cannot find module|Unable to resolve" build.log | grep -v "export " | head -60; echo "::endgroup::"
               echo "::group::Last 200 lines"; tail -n 200 build.log; echo "::endgroup::"
               exit 1; }
           tail -n 20 build.log
