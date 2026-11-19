@@ -5,6 +5,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: build-ipa
+  cancel-in-progress: true
+
 jobs:
   build:
     # Apple-chip (arm64) Macs were overloaded on 19 Nov 2026 — Intel runners queue faster. Switch back to macos-15 if this label is retired.
@@ -22,6 +26,10 @@ jobs:
 
       - name: Install packages
         run: npm install
+
+      - name: Test-build settings
+        # Expo reads .env when bundling the app code — makes sure the paywall skip is baked in
+        run: echo "EXPO_PUBLIC_TEST_UNLOCK=1" > .env
 
       - name: Generate iOS project
         run: npx expo prebuild -p ios --clean --no-install
