@@ -21,9 +21,7 @@ jobs:
           node-version: 20
 
       - name: Install packages
-        run: |
-          npm install
-          npx expo install --fix || true
+        run: npm install
 
       - name: Generate iOS project
         run: npx expo prebuild -p ios --clean --no-install
