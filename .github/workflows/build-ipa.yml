@@ -10,7 +10,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Fast check (~3 min, Linux): installs packages and bundles the app code.
+  # Catches code/package problems before the 25-minute Mac build.
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install packages
+        run: npm install
+      - name: Show key package versions
+        run: npm ls expo expo-asset expo-modules-core expo-constants expo-router babel-preset-expo @expo/metro-config @expo/prebuild-config --all 2>&1 | grep -E "expo|babel-preset|metro-config|prebuild-config" | head -60 || true
+      - name: Bundle the app code for iPhone
+        env:
+          EXPO_PUBLIC_TEST_UNLOCK: "1"
+        run: npx expo export --platform ios --output-dir /tmp/dist
+
   build:
+    needs: check
     # Apple-chip (arm64) Macs were overloaded on 19 Nov 2026 — Intel runners queue faster. Switch back to macos-15 if this label is retired.
     runs-on: macos-15-intel
     timeout-minutes: 60
