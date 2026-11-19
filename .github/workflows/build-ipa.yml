@@ -7,7 +7,8 @@ on:
 
 jobs:
   build:
-    runs-on: macos-15
+    # Apple-chip (arm64) Macs were overloaded on 19 Nov 2026 — Intel runners queue faster. Switch back to macos-15 if this label is retired.
+    runs-on: macos-15-intel
     timeout-minutes: 60
     env:
       # Test builds skip the paywall (store purchases don't work in sideloaded apps)
