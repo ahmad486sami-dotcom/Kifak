@@ -1,0 +1,7 @@
+-- Already applied 2026-11-19 on project prkpoolfoduzcrgtdxrh.
+-- The barber booking system was moved (not deleted) into the `barber` schema so Kifak could use `public`.
+-- Its 4 edge functions (ziina-webhook, admin, book, setup) are still deployed but won't work while parked.
+--
+-- To bring it back later (in its own project is best): move the tables/functions back to public, e.g.
+--   alter table barber.bookings set schema public;   -- repeat for each table
+--   alter function barber.dashboard() set schema public;  -- repeat for each function (see \df barber.*)
