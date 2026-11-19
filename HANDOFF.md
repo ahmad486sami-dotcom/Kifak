@@ -20,7 +20,7 @@ The first real step is `npm install` and a dev build. Expect a few small fixes o
 
 | Area | What it does |
 |---|---|
-| Sign-in | Apple, or email + 6-digit code. Name, gender (needed so the Arabic is correct) and language. |
+| Sign-in | Apple, or email + password (no verification — the `signup` function creates accounts already confirmed). Name, gender (needed so the Arabic is correct) and language. |
 | Quiz | 79 questions in 7 sections (attach, conflict, love, signals, moods, needs, life). Scale and multiple-choice. You need 4 sections to continue; the rest can be finished later. |
 | Profile | 9 personality types ("The Slow Burner", "The Deep Feeler"…), love language, attachment style, conflict style, trait bars, a share button. |
 | Paywall | 7-day trial, one subscription for both, restore, "my partner already pays", links to terms and privacy. |
@@ -59,13 +59,13 @@ Arabic text uses `{masc|fem}` for the person reading and `[masc|fem]` for their 
 ## Supabase — DONE (19 Nov 2026)
 Project **prkpoolfoduzcrgtdxrh** (`https://prkpoolfoduzcrgtdxrh.supabase.co`), the second project next to habibi-gains.
 - Kifak's schema is installed (`001`), along with 40 date spots (`002`) and function lock-down (`003`). The app's URL + public key are built into `app.config.ts`.
-- Functions deployed: `notify`, `delete-account`, `billing-webhook`. The webhook stays locked until `BILLING_WEBHOOK_SECRET` is set.
+- Functions deployed: `notify`, `delete-account`, `billing-webhook`, `signup`. The webhook stays locked until `BILLING_WEBHOOK_SECRET` is set.
 - Tested on the live DB with two fake users (rolled back): invite/join, streak, daily-answer privacy, partner profile access, premium can't be self-granted.
 - **The barber booking system that was in this project is parked in the `barber` schema.** All data is intact and nothing was deleted; see `000_park_barber.sql`.
 - Still manual (dashboard only):
-  1. Auth → Email Templates → **Magic Link** and **Confirm signup**: add `Your Kifak code: {{ .Token }}`. Without this, the email login sends a link instead of a 6-digit code.
-  2. Auth → SMTP: the built-in sender only allows a few emails per hour. Set custom SMTP (e.g. the same sender used for Habibi Gains) before testing with friends.
-  3. Auth → Providers → Apple, when doing TestFlight.
+  1. Auth → Providers → Apple, when doing TestFlight.
+- Sign-up is email + password with **no verification** (20 Nov 2026, Ahmad's call). Edge function `signup` creates the user already confirmed; the app then signs in with the password. No emails are sent, so no template/SMTP setup is needed.
+- Ahmad's main email already exists in this project's auth (it's the parked barber system's admin login), so for Kifak it's "Log in" with that account's password, or sign up with another email.
 
 ## Setup (in order)
 
