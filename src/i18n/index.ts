@@ -1,6 +1,5 @@
-import { I18nManager } from "react-native";
+import { I18nManager, Alert } from "react-native";
 import * as Localization from "expo-localization";
-import * as Updates from "expo-updates";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { strings, StringKey } from "./strings";
@@ -36,11 +35,11 @@ export async function setLang(lang: Lang) {
   if (I18nManager.isRTL !== wantRTL) {
     I18nManager.allowRTL(wantRTL);
     I18nManager.forceRTL(wantRTL);
-    try {
-      await Updates.reloadAsync();
-    } catch {
-      // In dev the layout flips on next launch
-    }
+    // Text switches now; the right-to-left layout flips after the app is reopened
+    Alert.alert(
+      lang === "ar" ? "تم تغيير اللغة" : "Language changed",
+      lang === "ar" ? "سكّر التطبيق وافتحه من جديد ليصير الاتجاه من اليمين لليسار." : "Close and reopen Kifak to finish switching the layout.",
+    );
   }
 }
 

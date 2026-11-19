@@ -31,10 +31,21 @@ jobs:
 
       - name: Build (no signing — ESign signs it)
         run: |
-          set -o pipefail
           xcodebuild -workspace ios/Kifak.xcworkspace -scheme Kifak -configuration Release \
             -sdk iphoneos -destination 'generic/platform=iOS' -archivePath build/Kifak.xcarchive archive \
-            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" | tail -n 80
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" > build.log 2>&1 || {
+              echo "::group::Errors"; grep -nE "error:|Error:|❌|ERROR|Failed|failed with" build.log | grep -v "^.*warning" | head -100; echo "::endgroup::"
+              echo "::group::Last 200 lines"; tail -n 200 build.log; echo "::endgroup::"
+              exit 1; }
+          tail -n 20 build.log
+
+      - name: Upload build log (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcode-build-log
+          path: build.log
+          if-no-files-found: ignore
 
       - name: Package .ipa
         run: |
