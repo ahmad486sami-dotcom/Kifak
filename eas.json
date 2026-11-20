@@ -9,11 +9,18 @@
     "preview": {
       "distribution": "internal"
     },
+    "testflight": {
+      "distribution": "store",
+      "autoIncrement": true,
+      "env": { "EXPO_PUBLIC_TEST_UNLOCK": "1" }
+    },
     "production": {
+      "distribution": "store",
       "autoIncrement": true
     }
   },
   "submit": {
+    "testflight": {},
     "production": {}
   }
 }

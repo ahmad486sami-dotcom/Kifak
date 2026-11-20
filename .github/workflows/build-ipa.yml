@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    # no app rebuild for notes, backend or TestFlight-setup changes
+    paths-ignore: ["**.md", "supabase/**", "eas.json", ".github/workflows/testflight.yml"]
 
 concurrency:
   group: build-ipa

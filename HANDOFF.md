@@ -91,6 +91,12 @@ Project **prkpoolfoduzcrgtdxrh** (`https://prkpoolfoduzcrgtdxrh.supabase.co`), t
 - These builds set `EXPO_PUBLIC_TEST_UNLOCK=1`, so they skip the paywall. EAS / App Store builds don't set it.
 - With a re-signed (ESign) app, **Sign in with Apple, push notifications, widgets and in-app purchases usually don't work**: they're tied to the real bundle ID and Apple certificates. Use email-code login to test. Test those four in a TestFlight build.
 
+## TestFlight via GitHub (20 Nov 2026)
+`.github/workflows/testflight.yml`: Actions → **Send to TestFlight** → Run workflow. It builds a signed app on the Expo build servers (`eas build`), then uploads it (`eas submit`).
+- Profile `testflight` skips the paywall (`EXPO_PUBLIC_TEST_UNLOCK=1`) because the subscription isn't set up yet. Profile `production` has the real paywall.
+- Repo secrets: `EXPO_TOKEN`, `EAS_PROJECT_ID`, `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8`, `APPLE_TEAM_ID`, and `ASC_APP_ID` once the app exists in App Store Connect.
+- The first run registers bundle IDs `com.kifak.app` and the widget extension, and creates the certificates. Then create the app in App Store Connect, add `ASC_APP_ID`, and re-run with "submit_only".
+
 ## Decisions made with Ahmad
 - Name: **Kifak** (one "a"), from Fairuz's "Kifak Inta". Arabic: كيفك. Rejected: Decode Us, Even Ground, The Mask.
 - iPhone only, App Store only.
